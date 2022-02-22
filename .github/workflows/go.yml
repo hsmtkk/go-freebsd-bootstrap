@@ -17,7 +17,7 @@ jobs:
 
     - name: extract source
       working-directory: /opt
-      run: tar fxz /go1.17.7.src.tar.gz
+      run: tar fxz go1.17.7.src.tar.gz
 
     - name: build
       working-directory: /opt/go/src
