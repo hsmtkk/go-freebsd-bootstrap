@@ -1,14 +1,8 @@
-name: Go
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+---
+name: go
+on: [push]  # yamllint disable-line rule:truthy
 jobs:
-
-  build:
+  go:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -18,8 +12,21 @@ jobs:
       with:
         go-version: 1.17
 
-    - name: Build
-      run: go build -v ./...
+    - name: get source
+      run: curl -L -o /opt/go1.17.7.src.tar.gz https://go.dev/dl/go1.17.7.src.tar.gz
 
-    - name: Test
-      run: go test -v ./...
+    - name: extract source
+      working-directory: /opt
+      run: tar fxz /go1.17.7.src.tar.gz
+
+    - name: build
+      working-directory: /opt/go/src
+      env:
+        GOOS: freebsd
+        GOARCH: amd64
+      run: bash bootstrap.bash
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: my-artifact
+        path: /opt/go-freebsd-amd64-bootstrap.tbz
