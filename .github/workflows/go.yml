@@ -5,28 +5,28 @@ jobs:
   go:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.17
+      - name: setup-go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
 
-    - name: get source
-      run: curl -L -o /opt/go1.17.7.src.tar.gz https://go.dev/dl/go1.17.7.src.tar.gz
+      - name: download-source
+        run: curl -L -o /opt/go1.17.7.src.tar.gz https://go.dev/dl/go1.17.7.src.tar.gz
 
-    - name: extract source
-      working-directory: /opt
-      run: tar fxz go1.17.7.src.tar.gz
+      - name: extract-source
+        working-directory: /opt
+        run: tar fxz go1.17.7.src.tar.gz
 
-    - name: build
-      working-directory: /opt/go/src
-      env:
-        GOOS: freebsd
-        GOARCH: amd64
-      run: bash bootstrap.bash
+      - name: build
+        working-directory: /opt/go/src
+        env:
+          GOOS: freebsd
+          GOARCH: amd64
+        run: bash bootstrap.bash
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: my-artifact
-        path: /opt/go-freebsd-amd64-bootstrap.tbz
+      - uses: actions/upload-artifact@v2
+        with:
+          name: go-bootstrap
+          path: /opt/go-freebsd-amd64-bootstrap.tbz
